@@ -1671,6 +1671,12 @@ fn main() {
         builder = builder.header(hwcontext_drm_header);
     }
 
+    if let Some(hwcontext_d3d12va_header) =
+        maybe_search_include(&include_paths, "libavutil/hwcontext_d3d12va.h")
+    {
+        builder = builder.header(hwcontext_d3d12va_header);
+    }
+
     // Finish the builder and generate the bindings.
     let bindings = builder
         .generate()
