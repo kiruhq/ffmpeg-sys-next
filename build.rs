@@ -638,6 +638,9 @@ fn build(sysroot: Option<&str>) -> io::Result<()> {
     enable!(configure, "BUILD_NVENC", "nvenc");
 
     // configure external protocols
+    if env::var("CARGO_FEATURE_AVFORMAT").is_ok() {
+        configure.arg("--enable-protocol=file");
+    }
     enable!(configure, "BUILD_LIB_SMBCLIENT", "libsmbclient");
     enable!(configure, "BUILD_LIB_SSH", "libssh");
 
