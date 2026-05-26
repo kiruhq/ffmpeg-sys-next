@@ -1668,16 +1668,23 @@ fn main() {
         builder = builder.header(search_include(&include_paths, "libswscale/swscale.h"));
     }
 
-    if let Some(hwcontext_drm_header) =
-        maybe_search_include(&include_paths, "libavutil/hwcontext_drm.h")
-    {
-        builder = builder.header(hwcontext_drm_header);
+    if matches!(
+        env::var("CARGO_CFG_TARGET_OS").as_deref(),
+        Ok("android") | Ok("linux")
+    ) {
+        if let Some(hwcontext_drm_header) =
+            maybe_search_include(&include_paths, "libavutil/hwcontext_drm.h")
+        {
+            builder = builder.header(hwcontext_drm_header);
+        }
     }
 
-    if let Some(hwcontext_d3d12va_header) =
-        maybe_search_include(&include_paths, "libavutil/hwcontext_d3d12va.h")
-    {
-        builder = builder.header(hwcontext_d3d12va_header);
+    if env::var("CARGO_CFG_TARGET_OS").as_deref() == Ok("windows") {
+        if let Some(hwcontext_d3d12va_header) =
+            maybe_search_include(&include_paths, "libavutil/hwcontext_d3d12va.h")
+        {
+            builder = builder.header(hwcontext_d3d12va_header);
+        }
     }
 
     // Finish the builder and generate the bindings.
